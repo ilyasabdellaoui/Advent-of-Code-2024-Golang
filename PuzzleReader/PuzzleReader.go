@@ -10,8 +10,7 @@ import (
 )
 
 var client = http.Client{}
-func ReadPuzzle() string {
-    url := "https://adventofcode.com/2024/day/1/input"
+func ReadPuzzle(url string) string {
     err := godotenv.Load(".env")
     if err != nil {
       fmt.Println("Ops, can't load env file: ", err)

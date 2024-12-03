@@ -9,7 +9,8 @@ import (
 )
 
 func main(){
-    puzzleInput := PuzzleReader.ReadPuzzle()
+    url := "https://adventofcode.com/2024/day/1/input"
+    puzzleInput := PuzzleReader.ReadPuzzle(url)
     
     var col1 []int
     var col2 []int
