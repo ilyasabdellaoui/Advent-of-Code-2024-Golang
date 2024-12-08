@@ -20,7 +20,13 @@ func main() {
             safeCount++
         }
     }
-    fmt.Println(safeCount)
+    fmt.Println("Part1 solution: ", safeCount)
+
+    safeSum := 0
+    for _, line := range lines {
+        safeSum += isToleratedSafe(line)
+    }
+    fmt.Println("Part2 solution: ", safeSum)
 }
 
 func isSafeReport(line string) bool {
@@ -32,6 +38,24 @@ func isSafeReport(line string) bool {
          return true   
     }
     return false
+}
+
+func isToleratedSafe(line string) int {
+    safe := 0
+    if isSafeReport(line) {
+        safe++
+    } else {
+        field := strings.Fields(line)
+        for idx := range field {
+            newField := append([]string{}, field[:idx]...)
+            newField = append(newField, field[idx+1:]...)
+            if isSafeReport(strings.Join(newField, " ")) {
+                safe++
+                break
+            }
+        }
+    }
+    return safe
 }
 
 func isDecreasing(field []string) bool {
