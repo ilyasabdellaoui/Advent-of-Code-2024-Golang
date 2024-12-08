@@ -34,7 +34,7 @@ func isSafeReport(line string) bool {
     if len(fields) == 0 {
         return false
     }
-    if isDecreasing(fields) || isIncreasing(fields) {
+    if isStrictMonotone(fields) {
          return true   
     }
     return false
@@ -58,32 +58,44 @@ func isToleratedSafe(line string) int {
     return safe
 }
 
-func isDecreasing(field []string) bool {
-    for idx := 0; idx < len(field)-1; idx++ {
-        num1, err1 := strconv.Atoi(field[idx])
-        num2, err2 := strconv.Atoi(field[idx+1])
-        if err1 != nil || err2 != nil {
-            return false
-        }
-        // checking both conditions
-        if num1 < num2 || num1 - num2 > 3 || num1 - num2 < 1 {
-            return false
-        }
+func isStrictMonotone(field []string) bool {
+    /* i introduced a bool to represent what i should check for: decreasing (represented by false)
+       and increasing (represented by true), we ll check based on if the first 2 subsequent elements are decreasing or increasing
+    */ 
+    var directionCheck bool
+    
+    firstElm, fErr1 := strconv.Atoi(field[0])
+    secElm, fErr2 := strconv.Atoi(field[1])
+    if fErr1 != nil || fErr2 != nil {
+        return false
     }
-    return true
-}
-
-func isIncreasing(field []string) bool {
+        
+    if firstElm > secElm {
+        directionCheck = false
+    } else if firstElm < secElm {
+        directionCheck = true
+    } else {
+        // Not monotonic if equal
+        return false
+    }
+        
     for idx := 0; idx < len(field)-1; idx++ {
         num1, err1 := strconv.Atoi(field[idx])
         num2, err2 := strconv.Atoi(field[idx+1])
         if err1 != nil || err2 != nil {
-            return false
-        }
-        if num1 > num2 || num2 - num1 > 3 || num2 - num1 < 1 {
             return false
         }
         
+        // increasing case
+        if directionCheck {
+            if num2-num1 > 3 || num2-num1 < 1 {
+                return false
+            }
+        } else {
+            if num1-num2 > 3 || num1-num2 < 1 {
+                return false
+            }
+        }
     }
-    return true
+    return true 
 }
