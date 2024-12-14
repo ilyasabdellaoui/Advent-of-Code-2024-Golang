@@ -1,5 +1,5 @@
 #!/bin/bash
-input="input.txt"
+input="corrupted_memory.txt"
 
 grep -oP "((?<=mul\()\d{1,3},\d{1,3}(?=\))|do\(\)|don't\(\))" $input > output.txt
 
